@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection string
-const mongoURI = 'mongodb+srv://skimmer:B1w4V2giw8AINkR4@clusterb.wxo3j.mongodb.net/Userid?tls=true&retryWrites=true&w=majority&appName=ClusterB';
+const mongoURI = process.env.MONGO_URI;
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
@@ -57,24 +57,6 @@ app.post('/login', async (req, res) => {
     }
   } catch (error) {
     console.error('Error during login:', error);
-    res.status(500).send('Error logging in');
-  }
-});
-
-
-// Route to handle login
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email, password }); // Consider hashing password
-    if (user) {
-      res.status(200).send('Login successful');
-    } else {
-      res.status(401).send('Invalid email or password');
-    }
-  } catch (error) {
-    console.error('Error during login:', error); // Log error
     res.status(500).send('Error logging in');
   }
 });
